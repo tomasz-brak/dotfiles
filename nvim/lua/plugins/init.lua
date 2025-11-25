@@ -21,7 +21,11 @@ return {
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
     opts = {},
-    lazy=false
+    lazy = false,
+  },
+  {
+    "brianhuster/live-preview.nvim",
+    lazy = false,
   },
   -- test new blink
   -- { import = "nvchad.blink.lazyspec" },
