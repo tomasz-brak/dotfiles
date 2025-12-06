@@ -10,6 +10,7 @@
 \[
 a + b = c
 \]
-
 $$a + b = c$$
-dasda
+
+$test \ldots prod$
+dasda:q

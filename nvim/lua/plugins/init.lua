@@ -51,8 +51,12 @@ return {
         "rust-analyzer",
         "clangd",
         "codelldb",
+<<<<<<< Updated upstream
         "pyright",
         "debugpy"
+=======
+        "texlab"
+>>>>>>> Stashed changes
       },
     },
   },

@@ -14,7 +14,7 @@ return {
       enabled = true,
       timeout = 3000,
     },
-    image = { enabled = true, math={enabled=true}},
+    image = { enabled = true, math={enabled=true}, force=true},
     picker = { enabled = true },
     quickfile = { enabled = true },
     scope = { enabled = true },
