@@ -11,4 +11,6 @@ map("n", "<leader>e", function() Snacks.explorer() end)
 
 map("n", "<leader>dp", "<cmd> DapToggleBreakpoint <cr>", { desc = "Add breakpoint for Debugger"})
 
--- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
+map("n", "<leader>lpN", function () vim.diagnostic.jump({count=-1, float=true}) end, { desc = "Go to previous diagnostic"})
+
+map("n", "<leader>lpn", function () vim.diagnostic.jump({count=1, float=true}) end, { desc = "Go to next diagnostic"})
