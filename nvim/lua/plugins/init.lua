@@ -20,8 +20,9 @@ return {
     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
-    opts = {},
-    lazy = false,
+    setup = {
+    },
+    lazy=false
   },
   {
     "brianhuster/live-preview.nvim",
@@ -51,12 +52,10 @@ return {
         "rust-analyzer",
         "clangd",
         "codelldb",
-<<<<<<< Updated upstream
         "pyright",
-        "debugpy"
-=======
-        "texlab"
->>>>>>> Stashed changes
+        "debugpy",
+        "texlab",
+        "gopls"
       },
     },
   },

@@ -23,6 +23,8 @@ require("lazy").setup({
   },
 
   { import = "plugins" },
+
+  -- { dir = "~/devl/otter.nvim", lazy=false}
 }, lazy_config)
 
 -- load theme

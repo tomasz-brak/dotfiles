@@ -21,6 +21,7 @@ return {
     scroll = { enabled = true },
     statuscolumn = { enabled = true },
     words = { enabled = true },
+    profiler = { enabled = true },
     styles = {
       notification = {
         -- wo = { wrap = true } -- Wrap notifications
@@ -592,6 +593,7 @@ return {
         Snacks.toggle.inlay_hints():map "<leader>uh"
         Snacks.toggle.indent():map "<leader>ug"
         Snacks.toggle.dim():map "<leader>uD"
+        Snacks.toggle.profiler():map("<leader>pp")
       end,
     })
   end
