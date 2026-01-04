@@ -14,3 +14,5 @@ map("n", "<leader>dp", "<cmd> DapToggleBreakpoint <cr>", { desc = "Add breakpoin
 map("n", "<leader>lpN", function () vim.diagnostic.jump({count=-1, float=true}) end, { desc = "Go to previous diagnostic"})
 
 map("n", "<leader>lpn", function () vim.diagnostic.jump({count=1, float=true}) end, { desc = "Go to next diagnostic"})
+
+map("n", "<leader>ih", function () vim.lsp.inlay_hint.enable() end, {desc = "Enable inlay hints"})

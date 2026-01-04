@@ -26,4 +26,8 @@ vim.lsp.config('basedpyright', {
 vim.lsp.config('texlab', {
 
 })
--- read :h vim.lsp.config for changing options of lsp serversdf ffsdfsf
+
+
+vim.lsp.config('', {
+  
+})
