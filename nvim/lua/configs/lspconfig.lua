@@ -6,12 +6,6 @@ vim.lsp.enable(servers)
 -- use vim.lsp.config('clang') style as requested
 vim.lsp.config('clang', {
   cmd = {
-    "clangd",
-    "--background-index",
-    "--clang-tidy",
-    "--completion-style=detailed",
-    "--header-insertion=never",
-    "--extra-arg=-std=c++26", -- ensure clangd parses as C++26
   },
   filetypes = { "c", "cpp", "objc", "objcpp" },
   settings = {
@@ -28,6 +22,4 @@ vim.lsp.config('texlab', {
 })
 
 
-vim.lsp.config('', {
-  
-})
+
