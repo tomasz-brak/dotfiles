@@ -23,6 +23,8 @@ require("lazy").setup({
   },
 
   { import = "plugins" },
+
+  -- { dir = "~/devl/otter.nvim", lazy=false}
 }, lazy_config)
 
 -- load theme
@@ -30,7 +32,24 @@ dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
 
 require "options"
-require "autocmds";
+require "autocmds"
+
+-- Setup Clipboard for wsl
+
+if vim.fn.has('wsl') == 1 or vim.env.WSL_DISTRO_NAME ~= nil then
+  vim.g.clipboard = {
+    name = 'WslClipboard',
+    copy = {
+      ['+'] = 'clip.exe',
+      ['*'] = 'clip.exe',
+    },
+    paste = {
+      ['+'] = [[powershell.exe -NoLogo -NoProfile -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))]],
+      ['*'] = [[powershell.exe -NoLogo -NoProfile -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))]],
+    },
+    cache_enabled = 0,
+  }
+end
 
 vim.schedule(function()
   require "mappings"
