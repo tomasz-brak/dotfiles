@@ -82,4 +82,29 @@ return {
       },
     },
   },
+  {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    opts = {--[[ things you want to change go here]]
+    },
+  },
+  {
+    "danymat/neogen",
+    config = true,
+    -- Uncomment next line if you want to follow only stable versions
+    -- version = "*"
+  },
+  {
+    "mfussenegger/nvim-dap",
+    enabled = true,
+  },
+  {
+    "rcarriga/nvim-dap-ui",
+    enabled = true,
+    -- virtual text for the debugger
+    {
+      "theHamsta/nvim-dap-virtual-text",
+      opts = {},
+    },
+  },
 }
