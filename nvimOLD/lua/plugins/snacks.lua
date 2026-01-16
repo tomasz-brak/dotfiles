@@ -7,14 +7,14 @@ return {
   opts = {
     bigfile = { enabled = true },
     dashboard = { enabled = true },
-    explorer = { enabled = true },
+    explorer = { enabled = true,   auto_close = true,},
     indent = { enabled = true },
     input = { enabled = true },
     notifier = {
       enabled = true,
       timeout = 3000,
     },
-    image = { enabled = true, math={enabled=true}, force=true},
+    image = { enabled = true, math={enabled=true}, },
     picker = { enabled = true },
     quickfile = { enabled = true },
     scope = { enabled = true },

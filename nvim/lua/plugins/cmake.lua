@@ -1,1 +1,1 @@
-return { 'Civitasv/cmake-tools.nvim', opts = {}, lazy=false}
+return { "Civitasv/cmake-tools.nvim", opts = {}, lazy = false }
