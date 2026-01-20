@@ -107,4 +107,36 @@ return {
       opts = {},
     },
   },
+  {
+    "kdheepak/lazygit.nvim",
+    lazy = true,
+    cmd = {
+      "LazyGit",
+      "LazyGitConfig",
+      "LazyGitCurrentFile",
+      "LazyGitFilter",
+      "LazyGitFilterCurrentFile",
+    },
+    -- optional for floating window border decoration
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    -- setting the keybinding for LazyGit with 'keys' is recommended in
+    -- order to load the plugin when the command is run for the first time
+    keys = {
+      { "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+    },
+  },
+  {
+    "akinsho/git-conflict.nvim",
+    version = "*",
+    lazy = false,
+    opts = {},
+    keys = {
+      { "<leader>ci", "<cmd>GitConflictChooseTheirs<cr>", desc = "Choose Theirs(incoming)" },
+      { "<leader>co", "<cmd>GitConflictChooseOurs<cr>", desc = "Choose Ours(existing)" },
+      { "<leader>cb", "<cmd>GitConflictChooseBoth<cr>", desc = "Choose Both(incoming + existing)" },
+      { "<leader>cn", "<cmd>GitConflictChooseNone<cr>", desc = "Choose None(Nothing)" },
+    },
+  },
 }
