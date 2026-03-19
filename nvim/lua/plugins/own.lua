@@ -43,7 +43,6 @@ return {
 
   -- for typescript, LazyVim also includes extra specs to properly setup lspconfig,
   -- treesitter, mason and typescript.nvim. So instead of the above, you can use:
-  { import = "lazyvim.plugins.extras.lang.typescript" },
 
   -- add more treesitter parsers
   {
@@ -79,6 +78,7 @@ return {
         "shellcheck",
         "shfmt",
         "flake8",
+        "texlab",
       },
     },
   },
@@ -138,5 +138,36 @@ return {
       { "<leader>cb", "<cmd>GitConflictChooseBoth<cr>", desc = "Choose Both(incoming + existing)" },
       { "<leader>cn", "<cmd>GitConflictChooseNone<cr>", desc = "Choose None(Nothing)" },
     },
+  },
+  { "mini.ai", disable = true },
+  {
+    "folke/snacks.nvim",
+    opts = {
+      picker = {
+        sources = {
+          explorer = {
+            auto_close = true,
+            layout = {
+              layout = {
+                position = "right",
+                width = 0.15,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  {
+    "lervag/vimtex",
+    lazy = false,
+    init = function()
+      vim.g.vimtex_view_general_viewer = "zathura"
+
+      vim.g.vimtex_compiler_method = "generic"
+      vim.g.vimtex_compiler_generic = {
+        command = "ls *.tex | entr -n -c tectonic /_ --synctex --keep-logs",
+      }
+    end,
   },
 }
