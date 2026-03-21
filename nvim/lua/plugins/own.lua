@@ -146,7 +146,12 @@ return {
       picker = {
         sources = {
           explorer = {
+            scope = {
+              patterns = { ".git", "lua", "CMakeLists.txt", "package.json" },
+            },
+
             auto_close = true,
+            root = false,
             layout = {
               layout = {
                 position = "right",
