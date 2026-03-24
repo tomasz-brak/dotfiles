@@ -72,6 +72,7 @@ return {
     "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
+        "codelldb",
         "basedpyright",
         "clangd",
         "stylua",
@@ -79,6 +80,7 @@ return {
         "shfmt",
         "flake8",
         "texlab",
+        "tex-fmt",
       },
     },
   },
@@ -168,11 +170,77 @@ return {
     lazy = false,
     init = function()
       vim.g.vimtex_view_general_viewer = "zathura"
+      vim.g.vimtex_view_zathura_options = "--synctex-editor-command --synctex-forward"
 
       vim.g.vimtex_compiler_method = "generic"
+      vim.g.vimtex_compiler_method = "generic"
       vim.g.vimtex_compiler_generic = {
-        command = "ls *.tex | entr -n -c tectonic /_ --synctex --keep-logs",
+        command = "ls @tex | entr -n -c tectonic /_ --synctex --keep-logs",
       }
     end,
+  },
+  {
+    "stevearc/overseer.nvim",
+    ---@module 'overseer'
+    ---@type overseer.SetupOpts
+    opts = {
+      templates = { "builtin" },
+    },
+    config = function(_, opts)
+      local overseer = require("overseer")
+      overseer.setup(opts)
+
+      overseer.register_template({
+        name = "Run Project",
+        builder = function()
+          if vim.fn.filereadable("CMakeLists.txt") == 1 then
+            return {
+              cmd = { "nvim" },
+              args = { "--server", vim.v.servername, "--remote-send", "<cmd>CMakeRun<cr>" },
+            }
+          elseif vim.bo.filetype == "python" then
+            local target = vim.fn.filereadable("app.py") == 1 and "app.py" or "main.py"
+            return { cmd = { "python3" }, args = { target } }
+          elseif vim.bo.filetype == "go" then
+            return { cmd = { "go" }, args = { "run", "." } }
+          elseif vim.bo.filetype == "tex" then
+            return {
+              cmd = { "nvim" },
+              args = { "--server", vim.v.servername, "--remote-send", "<cmd>VimtexCompile<cr>" },
+            }
+          end
+          return nil
+        end,
+        condition = {
+          callback = function()
+            return vim.bo.filetype == "python"
+              or vim.bo.filetype == "go"
+              or vim.bo.filetype == "tex"
+              or vim.fn.filereadable("CMakeLists.txt") == 1
+          end,
+        },
+      })
+    end,
+  },
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = {
+        -- Use tex-fmt for LaTeX and related files
+        tex = { "tex-fmt" },
+        plaintex = { "tex-fmt" },
+        bib = { "tex-fmt" },
+      },
+      formatters = {
+        ["tex-fmt"] = {
+          command = "tex-fmt",
+          -- tex-fmt reads from stdin by default when no file is provided,
+          -- but for conform it's best to explicitly handle it if needed.
+          -- Standard usage for tex-fmt as a filter:
+          args = { "--stdin" },
+          stdin = true,
+        },
+      },
+    },
   },
 }
