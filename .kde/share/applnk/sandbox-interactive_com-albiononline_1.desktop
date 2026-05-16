@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Value=1.0
+Type=Application
+Name=Albion Online
+GenericName=MMORPG
+Comment=Play Albion Online!
+Icon=/home/tomasz/.local/share/Steam/steamapps/common/Albion Online/AlbionOnline.xpm
+Exec="/home/tomasz/.local/share/Steam/steamapps/common/Albion Online/Albion-Online"
+Categories=Game
+StartupWMClass=Albion-Online
+Path=/home/tomasz/.local/share/Steam/steamapps/common/Albion Online
+
+OnlyShowIn=Old;
