@@ -37,6 +37,20 @@ return {
       servers = {
         -- pyright will be automatically installed with mason and loaded with lspconfig
         basedpyright = {},
+        clangd = {
+          -- Pass command-line arguments to clangd
+          cmd = {
+            "clangd",
+            "--background-index",
+            "--clang-tidy",
+            -- CRITICAL: This enables the underlying C++20 module indexing engine
+            "--experimental-modules-support",
+          },
+          -- Fallback flags ensure clangd treats loose files as C++20 modules
+          init_options = {
+            fallbackFlags = { "-std=c++26" }, -- or "-std=c++23" depending on your project
+          },
+        },
       },
     },
   },

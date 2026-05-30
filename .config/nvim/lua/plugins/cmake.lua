@@ -1,1 +1,9 @@
-return { "Civitasv/cmake-tools.nvim", opts = {}, lazy = false }
+return {
+  "Civitasv/cmake-tools.nvim",
+
+  config = function()
+    require("cmake-tools").setup({
+      cmake_generate_options = { "-G", "Ninja" },
+    })
+  end,
+}
