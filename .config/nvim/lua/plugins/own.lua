@@ -86,7 +86,7 @@ return {
     "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
-        "ltex-ls-plus",
+        "tinymist",
         "codelldb",
         "basedpyright",
         "clangd",
@@ -222,6 +222,11 @@ return {
               cmd = { "nvim" },
               args = { "--server", vim.v.servername, "--remote-send", "<cmd>VimtexCompile<cr>" },
             }
+          elseif vim.bo.filetype == "typ" then
+            return {
+              cmd = { "nvim" },
+              args = { "--server", vim.v.servername, "--remote-send", "<cmd>TypstPreviewToggle<cr>" },
+            }
           end
           return nil
         end,
@@ -270,60 +275,20 @@ return {
     },
   },
   {
-    "jhofscheier/ltex-utils.nvim",
-    dependencies = {
-      "neovim/nvim-lspconfig",
-      "nvim-telescope/telescope.nvim",
-    },
-    opts = {
-      dictionary = {
-        -- Dictionaries will be saved as 'en-US.txt' and 'pl-PL.txt' in this path
-        path = vim.fn.stdpath("cache") .. "/ltex/",
-        filename = function(lang)
-          return lang .. ".txt"
-        end,
-        use_vim_dict = false,
-        vim_cmd_output = false,
-      },
-      rule_ui = {
-        modify_rule_key = "<CR>",
-        delete_rule_key = "d",
-        cleanup_rules_key = "c",
-        goto_key = "g",
-        previewer_line_number = true,
-        previewer_wrap = true,
-        telescope = { bufnr = 0 },
-      },
-      diagnostics = {
-        debounce_time_ms = 500,
-        diags_false_pos = true,
-        diags_disable_rules = true,
-      },
-      -- Matches your preferred backend
-      backend = "ltex_plus",
-    },
-    config = function(_, opts)
-      require("ltex-utils").setup(opts)
-
-      require("lspconfig").ltex_plus.setup({
-        settings = {
-          ltex = {
-            language = "pl-PL", -- Default language
-          },
-        },
-        on_attach = function(client, bufnr)
-          -- Optional: Create a command to toggle between English and Polish
-          vim.api.nvim_buf_create_user_command(bufnr, "LtexLangPolish", function()
-            client.config.settings.ltex.language = "pl-PL"
-            client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-          end, {})
-
-          vim.api.nvim_buf_create_user_command(bufnr, "LtexLangEnglish", function()
-            client.config.settings.ltex.language = "en-US"
-            client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-          end, {})
-        end,
-      })
-    end,
+    "chomosuke/typst-preview.nvim",
+    lazy = false, -- or ft = 'typst'
+    version = "1.*",
+    opts = {}, -- lazy.nvim will implicitly calls `setup {}`
+  },
+  {
+    "kylechui/nvim-surround",
+    version = "^4.0.0", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    -- Optional: See `:h nvim-surround.configuration` and `:h nvim-surround.setup` for details
+    -- config = function()
+    --     require("nvim-surround").setup({
+    --         -- Put your configuration here
+    --     })
+    -- end
   },
 }
