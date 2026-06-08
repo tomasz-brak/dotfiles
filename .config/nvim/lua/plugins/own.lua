@@ -291,4 +291,14 @@ return {
     --     })
     -- end
   },
+  {
+    "Kirizan/typst-bib.nvim",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+    },
+    ft = "typst",
+    config = function()
+      require("typst-bib").setup()
+    end,
+  },
 }
