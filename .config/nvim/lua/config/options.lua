@@ -3,5 +3,4 @@
 -- Add any additional options here
 --
 --
-vim.opt.spell = false
 vim.opt.clipboard = "unnamedplus"
