@@ -86,6 +86,9 @@ return {
     "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
+        "tailwindcss-language-server",
+        "svelte-language-server",
+        "rust-analyzer",
         "tinymist",
         "codelldb",
         "basedpyright",
@@ -172,7 +175,7 @@ return {
             layout = {
               layout = {
                 position = "right",
-                width = 0.15,
+                width = 0.20,
               },
             },
           },
@@ -299,6 +302,24 @@ return {
     ft = "typst",
     config = function()
       require("typst-bib").setup()
+    end,
+  },
+  {
+    "ajbucci/ipynb.nvim",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "neovim/nvim-lspconfig",
+    },
+    opts = {},
+    config = function(_, opts)
+      -- Initialize the plugin with its options
+      require("ipynb").setup(opts)
+
+      -- Define the keymap to execute all cells
+      vim.keymap.set("n", "<leader>ke", "<cmd>NotebookExecuteAll<cr>", {
+        desc = "IPython: Execute all cells",
+        silent = true,
+      })
     end,
   },
 }
