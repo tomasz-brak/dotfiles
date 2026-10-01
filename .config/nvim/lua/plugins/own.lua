@@ -31,6 +31,10 @@ return {
   -- add pyright to lspconfig
   {
     "neovim/nvim-lspconfig",
+    dependencies = {
+      { "folke/lazydev.nvim", ft = "lua", opts = {} },
+      "mason-org/mason.nvim",
+    },
     ---@class PluginLspOpts
     opts = {
       ---@type lspconfig.options
