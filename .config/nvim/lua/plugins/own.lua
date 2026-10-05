@@ -40,7 +40,6 @@ return {
       ---@type lspconfig.options
       servers = {
         -- pyright will be automatically installed with mason and loaded with lspconfig
-        basedpyright = {},
         clangd = {
           -- Pass command-line arguments to clangd
           cmd = {
@@ -95,7 +94,7 @@ return {
         "rust-analyzer",
         "tinymist",
         "codelldb",
-        "basedpyright",
+        "pyright",
         "clangd",
         "stylua",
         "shellcheck",
@@ -109,7 +108,7 @@ return {
   {
     "akinsho/toggleterm.nvim",
     version = "*",
-    opts = {--[[ things you want to change go here]]
+    opts = { --[[ things you want to change go here]]
     },
   },
   {
@@ -158,9 +157,9 @@ return {
     opts = {},
     keys = {
       { "<leader>ci", "<cmd>GitConflictChooseTheirs<cr>", desc = "Choose Theirs(incoming)" },
-      { "<leader>co", "<cmd>GitConflictChooseOurs<cr>", desc = "Choose Ours(existing)" },
-      { "<leader>cb", "<cmd>GitConflictChooseBoth<cr>", desc = "Choose Both(incoming + existing)" },
-      { "<leader>cn", "<cmd>GitConflictChooseNone<cr>", desc = "Choose None(Nothing)" },
+      { "<leader>co", "<cmd>GitConflictChooseOurs<cr>",   desc = "Choose Ours(existing)" },
+      { "<leader>cb", "<cmd>GitConflictChooseBoth<cr>",   desc = "Choose Both(incoming + existing)" },
+      { "<leader>cn", "<cmd>GitConflictChooseNone<cr>",   desc = "Choose None(Nothing)" },
     },
   },
   { "mini.ai", disable = true },
@@ -240,9 +239,9 @@ return {
         condition = {
           callback = function()
             return vim.bo.filetype == "python"
-              or vim.bo.filetype == "go"
-              or vim.bo.filetype == "tex"
-              or vim.fn.filereadable("CMakeLists.txt") == 1
+                or vim.bo.filetype == "go"
+                or vim.bo.filetype == "tex"
+                or vim.fn.filereadable("CMakeLists.txt") == 1
           end,
         },
       })
@@ -285,7 +284,7 @@ return {
     "chomosuke/typst-preview.nvim",
     lazy = false, -- or ft = 'typst'
     version = "1.*",
-    opts = {}, -- lazy.nvim will implicitly calls `setup {}`
+    opts = {},    -- lazy.nvim will implicitly calls `setup {}`
   },
   {
     "kylechui/nvim-surround",
