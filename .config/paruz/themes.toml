@@ -1,0 +1,9 @@
+[themes]
+  [themes.dracula-pro]
+    title_bg = "#bd93f9"
+    title_fg = "#282a36"
+    border = "#6272a4"
+    info_title = "#ff79c6"
+    info_key = "#8be9fd"
+    error = "#ff5555"
+    status_bar = "#f8f8f2"

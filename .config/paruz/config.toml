@@ -1,0 +1,3 @@
+aur_helper = "paru"
+mirror_helper = "rate-mirrors"
+theme = "ayu-dark"
