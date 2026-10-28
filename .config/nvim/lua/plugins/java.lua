@@ -12,7 +12,6 @@ return {
       local dapui = require("dapui")
 
       dapui.setup()
-      require("nvim-dap-virtual-text").setup()
 
       -- Auto open/close debug UI
       dap.listeners.after.event_initialized["dapui_config"] = function()
@@ -37,20 +36,6 @@ return {
       vim.keymap.set("n", "<leader>du", dapui.toggle, { desc = "Debug: Toggle DAP UI" })
     end,
   },
-
-  -- Package manager ensuring JDTLS and debug adapters are installed
-  {
-    "williamboman/mason.nvim",
-    opts = function(_, opts)
-      opts.ensure_installed = opts.ensure_installed or {}
-      vim.list_extend(opts.ensure_installed, {
-        "jdtls",
-        "java-debug-adapter",
-        "java-test",
-      })
-    end,
-  },
-
   -- Java LSP & Debug Integration
   {
     "mfussenegger/nvim-jdtls",

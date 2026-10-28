@@ -89,6 +89,9 @@ return {
     "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
+        "jdtls",
+        "java-debug-adapter",
+        "java-test",
         "tailwindcss-language-server",
         "svelte-language-server",
         "rust-analyzer",
@@ -157,9 +160,9 @@ return {
     opts = {},
     keys = {
       { "<leader>ci", "<cmd>GitConflictChooseTheirs<cr>", desc = "Choose Theirs(incoming)" },
-      { "<leader>co", "<cmd>GitConflictChooseOurs<cr>",   desc = "Choose Ours(existing)" },
-      { "<leader>cb", "<cmd>GitConflictChooseBoth<cr>",   desc = "Choose Both(incoming + existing)" },
-      { "<leader>cn", "<cmd>GitConflictChooseNone<cr>",   desc = "Choose None(Nothing)" },
+      { "<leader>co", "<cmd>GitConflictChooseOurs<cr>", desc = "Choose Ours(existing)" },
+      { "<leader>cb", "<cmd>GitConflictChooseBoth<cr>", desc = "Choose Both(incoming + existing)" },
+      { "<leader>cn", "<cmd>GitConflictChooseNone<cr>", desc = "Choose None(Nothing)" },
     },
   },
   { "mini.ai", disable = true },
@@ -239,9 +242,9 @@ return {
         condition = {
           callback = function()
             return vim.bo.filetype == "python"
-                or vim.bo.filetype == "go"
-                or vim.bo.filetype == "tex"
-                or vim.fn.filereadable("CMakeLists.txt") == 1
+              or vim.bo.filetype == "go"
+              or vim.bo.filetype == "tex"
+              or vim.fn.filereadable("CMakeLists.txt") == 1
           end,
         },
       })
@@ -284,7 +287,7 @@ return {
     "chomosuke/typst-preview.nvim",
     lazy = false, -- or ft = 'typst'
     version = "1.*",
-    opts = {},    -- lazy.nvim will implicitly calls `setup {}`
+    opts = {}, -- lazy.nvim will implicitly calls `setup {}`
   },
   {
     "kylechui/nvim-surround",
