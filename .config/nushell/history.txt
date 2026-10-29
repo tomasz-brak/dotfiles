@@ -1,0 +1,103 @@
+ls
+cd
+cd .config\
+ls
+nvim .
+cd
+cd devl
+cvd dev
+ls
+dev
+cd dev
+ls
+cd Documents\
+cd dev
+ls
+cd projektmod\
+ls
+nvim .
+find
+nvim .
+cd Documents\dev\projektmod\
+ls
+nvim .
+exit
+ls | less
+ls
+ls | rg
+ls | grep
+ls | find "d"
+ls
+cd Documents\dev\projektmod\
+ls
+gradlew run
+gradlew listtasks
+nvim .
+winget install ripgrep
+winget find ripgrep
+winget find ripgrep.GNU
+winget install ripgrep.GNU
+winget install BurntSushi.ripgrep.GNU
+rg
+gradlew listtasks
+gradlew tasks
+winget install w64devkit
+winget install MSYS2.MSYS2
+msys
+exit
+nvim .
+exit
+gcc --version
+cd Documents\dev\projektmod\
+nvim .
+cl
+exit
+gcc
+cl
+which gcc
+winget install --id=Microsoft.VisualStudio.2022.BuildTools --override "--add Microsoft.VisualStudio.Workload.VCTools --includeRecommended --passive"
+ls
+cl
+cccl
+nvim .
+cd Documents\dev\projektmod\
+gradlew runClient
+./gradlew clean
+gradlew runClient
+./gradlew clean
+gradlew runClient
+agy
+gradlew runClient
+git remote add origin https://github.com/tomasz-brak/projektObiektowe.git
+git branch -M main
+git init 
+git remote add origin https://github.com/tomasz-brak/projektObiektowe.git
+git branch -M main
+git push -u origin main
+git add .
+git status
+git commit -m "initial commit"
+git push
+ls
+cd .config
+cd
+cd .config
+ls
+git pull
+cd
+nvim .
+cd .config
+nvim .
+nvim .
+git reset --hard
+clear
+ls
+cd dev/
+cd Documents\dev\projektmod\
+nvim .
+cd .config
+cd
+cd .config
+ls
+agy
+git status
