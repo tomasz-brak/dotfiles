@@ -101,3 +101,30 @@ cd .config
 ls
 agy
 git status
+git add .
+git commit -m "add nu shell"
+git push
+cd dev
+cd Documents\dev\projektmod\
+ls
+nvim .
+ssh tomasz@64.227.120.95
+ssh tomasz@64.227.120.95 -u
+ssh tomasz@64.227.120.95 -i ./Documents/shh_key
+ssh root@64.227.120.95 -i ./Documents/shh_key
+scp root@64.227.120.95 -i ./Documents/shh_key /root/tomasz.conf ./
+scp -i ./Documents/shh_key root@64.227.120.95:/root/tomasz.conf .
+expolorer .
+explorer .
+ssh root@64.227.120.95 -i ./Documents/shh_key
+cd Documents\dev\projektmod\
+nvim .
+ls
+nvim .
+ps
+wsl
+cd
+cd Documents\dev\projektmod\
+ls
+nvim .
+agy

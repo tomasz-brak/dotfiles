@@ -67,7 +67,21 @@ map("n", "<leader>fF", function()
   require("telescope.builtin").find_files({ cwd = LazyVim.root() })
 end, { desc = "Find Files (Root Dir)" })
 
+-- Helper to check if current buffer/workspace is a Gradle project
+local function is_gradle_project()
+  local root_markers = { "settings.gradle", "settings.gradle.kts", "build.gradle", "build.gradle.kts", "gradlew", "gradlew.bat" }
+  return vim.fs.root(0, root_markers) ~= nil
+end
+
 vim.keymap.set("n", "<leader>r", function()
+  if is_gradle_project() then
+    local gradle = require("config.gradle")
+    gradle.pick_gradle_task(function(task, root, cmd)
+      gradle.run_gradle_task(task, root, cmd)
+    end)
+    return
+  end
+
   -- We search for the template and run it if found
   overseer.run_template({ name = "Run Project" }, function(task)
     if task then
@@ -76,7 +90,20 @@ vim.keymap.set("n", "<leader>r", function()
       vim.notify("No 'Run Project' template found for this context", vim.log.levels.WARN)
     end
   end)
-end, { desc = "Contextual Project Run" })
+end, { desc = "Contextual Project Run / Gradle Task" })
+
+vim.keymap.set("n", "<leader>R", function()
+  if is_gradle_project() then
+    local gradle = require("config.gradle")
+    gradle.pick_gradle_task(function(task, root, cmd)
+      gradle.debug_gradle_task(task, root, cmd)
+    end)
+    return
+  end
+
+  -- Non-gradle fallback: launch DAP continue/picker
+  require("dap").continue()
+end, { desc = "Debug Run (Gradle / DAP)" })
 
 ------------
 -- Vimtex --
