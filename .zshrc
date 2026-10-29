@@ -123,3 +123,8 @@ alias quick-rate-mirrors='export TMPFILE="$(mktemp)"; \
 
 export QSYS_ROOTDIR="/home/tomasz/.cache/yay/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/25.1/quartus/sopc_builder/bin"
 export PATH="$HOME/.cargo/bin:$PATH"
+
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"

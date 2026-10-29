@@ -56,6 +56,7 @@ return {
         name = "Debug (Attach) - Port 5005",
         hostName = "::1",
         port = 5005,
+        projectName = "projektObiektowe",
       })
 
       -- Hot reload: Compile workspace and apply changed bytecode classes
@@ -71,7 +72,8 @@ return {
           local dap = require("dap")
           local session = dap.session()
           if session then
-            session:request("redefineClasses", nil, function(err)
+            local project_name = (session.config and (session.config.projectName or session.config.name)) or "projektObiektowe"
+            session:request("redefineClasses", { projectName = project_name }, function(err)
               if err then
                 vim.notify("Hot reload failed: " .. vim.inspect(err), vim.log.levels.ERROR)
               else

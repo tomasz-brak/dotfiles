@@ -190,6 +190,7 @@ function M.debug_gradle_task(task_name, root, cmd)
       name = "Attach to Gradle JVM (5005)",
       hostName = "::1",
       port = port,
+      projectName = vim.fs.basename(root),
     })
   end
 
@@ -219,6 +220,7 @@ function M.debug_gradle_task(task_name, root, cmd)
       name = "Attach to Gradle JVM (5005)",
       hostName = "::1",
       port = port,
+      projectName = vim.fs.basename(root),
     })
   end, function()
     vim.notify("Timed out waiting for JVM socket on port " .. port, vim.log.levels.WARN)
