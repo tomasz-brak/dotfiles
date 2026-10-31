@@ -131,13 +131,13 @@ local function wait_for_port(port, timeout_ms, interval_ms, on_ready, on_timeout
 
   local function check()
     local done = false
-    local function finish(err)
+    local function finish(err, host)
       if done then return end
       if not err then
         done = true
         timer:stop()
         timer:close()
-        vim.schedule(on_ready)
+        vim.schedule(function() on_ready(host) end)
       else
         if (vim.uv.now() - start) >= timeout_ms then
           done = true
@@ -153,13 +153,17 @@ local function wait_for_port(port, timeout_ms, interval_ms, on_ready, on_timeout
     tcp6:connect("::1", port, function(err6)
       tcp6:close()
       if not err6 then
-        finish(nil)
+        finish(nil, "::1")
       else
         -- Fallback to IPv4 127.0.0.1
         local tcp4 = vim.uv.new_tcp()
         tcp4:connect("127.0.0.1", port, function(err4)
           tcp4:close()
-          finish(err4)
+          if not err4 then
+            finish(nil, "127.0.0.1")
+          else
+            finish(err4, nil)
+          end
         end)
       end
     end)
@@ -188,7 +192,7 @@ function M.debug_gradle_task(task_name, root, cmd)
       type = "java",
       request = "attach",
       name = "Attach to Gradle JVM (5005)",
-      hostName = "::1",
+      hostName = "127.0.0.1",
       port = port,
       projectName = vim.fs.basename(root),
     })
@@ -212,13 +216,14 @@ function M.debug_gradle_task(task_name, root, cmd)
   -- Wait for Gradle JVM to bind to port 5005, then connect DAP and trigger DAP UI
   vim.notify("Starting Gradle task with --debug-jvm. Waiting for JVM on port " .. port .. "...", vim.log.levels.INFO)
 
-  wait_for_port(port, 120000, 500, function()
-    vim.notify("JVM debug socket ready! Attaching debugger...", vim.log.levels.INFO)
+  wait_for_port(port, 120000, 500, function(ready_host)
+    local target_host = ready_host or "127.0.0.1"
+    vim.notify("JVM debug socket ready on " .. target_host .. "! Attaching debugger...", vim.log.levels.INFO)
     dap.run({
       type = "java",
       request = "attach",
       name = "Attach to Gradle JVM (5005)",
-      hostName = "::1",
+      hostName = target_host,
       port = port,
       projectName = vim.fs.basename(root),
     })

@@ -128,3 +128,78 @@ cd Documents\dev\projektmod\
 ls
 nvim .
 agy
+git add .
+git status
+git commit -m "java debug"
+git push
+ls
+cd ..
+ls
+wsl
+exit
+agy -c
+cd dev
+cd Documents\dev\
+git clone https://github.com/GTNewHorizons/MatterManipulator.git
+cd MatterManipulator\
+intelij
+./gradlew.bat addon.gradle
+./gradlew.bat listtasks
+./gradlew.bat --taska
+./gradlew.bat --tasks
+./gradlew.bat tasks
+./gradlew.bat spotlessApply
+git add .
+git commit -m "spotless"
+./gradlew.bat spotlessApply
+./gradlew.bat check
+./gradlew.bat test
+git remote remove origin
+git remote add origin https://github.com/tomasz-brak/MatterManipulator.git
+git push
+git push origin master
+git add .
+git commit -m "remove gt deb dep"
+git push
+git push origin master
+gradlew spotlessapply
+gradlew spotlesapply
+gradlew tasks
+gradlew tasks | find spotless
+gradlew tasks | find spot
+gradlew tasks | find
+gradlew check
+git add .
+git status
+git commit -m "fix typo"
+cd 
+cd .config
+l;s
+kls
+ls
+git pull 
+git status
+lcear
+clear
+ls
+cd nvim 
+ls
+nvim .
+help
+man
+cls
+cd
+wsl
+exit
+nu
+clear
+cd dev
+wsl
+cd Documents\dev\projektmod\
+ls
+cd .config
+cd nvim\
+nvim .
+which java
+nvim .
+cd .config

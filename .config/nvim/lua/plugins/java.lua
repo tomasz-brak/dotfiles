@@ -1,3 +1,63 @@
+local function hot_reload()
+  -- 1. Save all open modified buffers to disk
+  vim.cmd("silent! wall")
+
+  local dap = require("dap")
+
+  -- 2. Locate running JDTLS client
+  local clients = vim.lsp.get_clients({ name = "jdtls" })
+  local client = clients[1]
+  if not client then
+    vim.notify("JDTLS language server is not running. Open a Java file first.", vim.log.levels.WARN)
+    return
+  end
+
+  vim.notify("Compiling workspace & hot-reloading...", vim.log.levels.INFO)
+
+  -- 3. Request incremental workspace build directly from JDTLS
+  -- java/buildWorkspace: false = incremental, true = full
+  local bufnr = vim.api.nvim_get_current_buf()
+  client:request("java/buildWorkspace", false, function(err, result)
+    if err then
+      vim.notify("Workspace build failed: " .. (err.message or vim.inspect(err)), vim.log.levels.ERROR)
+      return
+    end
+
+    -- CompileWorkspaceStatus: 0 = FAILED, 1 = SUCCEED, 2 = WITHERROR, 3 = CANCELLED
+    if result == 0 then
+      vim.notify("Build failed with compiler errors! Fix errors and try again.", vim.log.levels.ERROR)
+      return
+    elseif result == 3 then
+      vim.notify("Build cancelled.", vim.log.levels.WARN)
+      return
+    end
+
+    if result == 2 then
+      vim.notify("Build completed with warnings/errors.", vim.log.levels.WARN)
+    end
+
+    -- 4. If DAP debug session is active, redefine changed classes in running JVM
+    local active_session = dap.session()
+    if not active_session then
+      vim.notify("Workspace compiled successfully (no active debug session to hot-swap).", vim.log.levels.INFO)
+      return
+    end
+
+    active_session:request("redefineClasses", nil, function(redefine_err, resp)
+      if redefine_err then
+        vim.notify("Hot reload failed: " .. (redefine_err.message or vim.inspect(redefine_err)), vim.log.levels.ERROR)
+      else
+        local changed = (resp and resp.changedClasses) or {}
+        if #changed > 0 then
+          vim.notify("Hot reload applied: " .. table.concat(changed, ", "), vim.log.levels.INFO)
+        else
+          vim.notify("Hot reload applied successfully!", vim.log.levels.INFO)
+        end
+      end
+    end)
+  end, bufnr)
+end
+
 return {
   -- Debug Adapter Protocol (DAP) core & UI
   {
@@ -24,28 +84,38 @@ return {
         dapui.close()
       end
 
-      -- Ensure dap.adapters.java is always defined
-      dap.adapters.java = function(callback, _)
-        local ok, jdtls_util = pcall(require, "jdtls.util")
-        local bufnr = vim.api.nvim_get_current_buf()
-        if not ok or not jdtls_util then
-          callback({ type = "server", host = "127.0.0.1", port = 5005 })
-          return
-        end
+      -- Initialize JDTLS DAP adapter & hot reload integration
+      local ok_jdtls_dap, jdtls_dap = pcall(require, "jdtls.dap")
+      if ok_jdtls_dap then
+        jdtls_dap.setup_dap({ hotcodereplace = "auto" })
+      end
 
-        jdtls_util.execute_command({ command = "vscode.java.startDebugSession" }, function(err, port)
-          if err or not port then
-            vim.notify("Could not start JDTLS debug session: " .. vim.inspect(err or "nil port"), vim.log.levels.WARN)
-            callback({ type = "server", host = "127.0.0.1", port = 5005 })
-            return
+      -- Ensure hot code replace event listener gives clear feedback
+      dap.listeners.before["event_hotcodereplace"]["jdtls"] = function(session, body)
+        local change_type = body.changeType
+        -- hotcodereplace_type: 0 = ERROR, 1 = WARNING, 2 = BUILD_COMPLETE
+        if change_type == 2 or change_type == "BUILD_COMPLETE" then
+          session:request("redefineClasses", nil, function(err, resp)
+            if err then
+              vim.notify("Hot code replace failed: " .. (err.message or vim.inspect(err)), vim.log.levels.ERROR)
+            else
+              local changed = (resp and resp.changedClasses) or {}
+              if #changed > 0 then
+                vim.notify("Hot reload: Redefined " .. table.concat(changed, ", "), vim.log.levels.INFO)
+              else
+                vim.notify("Hot reload applied successfully!", vim.log.levels.INFO)
+              end
+            end
+          end)
+        elseif body.message then
+          local lvl = vim.log.levels.INFO
+          if change_type == 0 or (body.message and (body.message:match("not implemented") or body.message:match("failed"))) then
+            lvl = vim.log.levels.ERROR
+          elseif change_type == 1 then
+            lvl = vim.log.levels.WARN
           end
-
-          callback({
-            type = "server",
-            host = "127.0.0.1",
-            port = port,
-          })
-        end, bufnr)
+          vim.notify("Hot code replace: " .. body.message, lvl)
+        end
       end
 
       -- Ensure default remote attach configuration exists
@@ -54,37 +124,14 @@ return {
         type = "java",
         request = "attach",
         name = "Debug (Attach) - Port 5005",
-        hostName = "::1",
+        hostName = "127.0.0.1",
         port = 5005,
-        projectName = "projektObiektowe",
+        projectName = function()
+          local root_markers = { "settings.gradle", "settings.gradle.kts", "build.gradle", "build.gradle.kts", ".git" }
+          local root = vim.fs.root(0, root_markers) or vim.uv.cwd()
+          return vim.fs.basename(root)
+        end,
       })
-
-      -- Hot reload: Compile workspace and apply changed bytecode classes
-      local function hot_reload()
-        local ok, jdtls = pcall(require, "jdtls")
-        if not ok then
-          vim.notify("jdtls is not loaded", vim.log.levels.WARN)
-          return
-        end
-
-        vim.notify("Triggering hot reload (incremental build)...", vim.log.levels.INFO)
-        jdtls.compile("incremental", function()
-          local dap = require("dap")
-          local session = dap.session()
-          if session then
-            local project_name = (session.config and (session.config.projectName or session.config.name)) or "projektObiektowe"
-            session:request("redefineClasses", { projectName = project_name }, function(err)
-              if err then
-                vim.notify("Hot reload failed: " .. vim.inspect(err), vim.log.levels.ERROR)
-              else
-                vim.notify("Hot reload applied successfully!", vim.log.levels.INFO)
-              end
-            end)
-          else
-            vim.notify("Workspace compiled (no active DAP debug session to hot-swap).", vim.log.levels.INFO)
-          end
-        end)
-      end
 
       -- Debugger Keybindings
       vim.keymap.set("n", "<F5>", dap.continue, { desc = "Debug: Start/Continue" })
@@ -98,6 +145,9 @@ return {
       vim.keymap.set("n", "<leader>du", dapui.toggle, { desc = "Debug: Toggle DAP UI" })
       vim.keymap.set("n", "<leader>hr", hot_reload, { desc = "Debug: Hot Reload / Redefine Classes" })
       vim.keymap.set("n", "<leader>rh", hot_reload, { desc = "Debug: Hot Reload / Redefine Classes" })
+      vim.api.nvim_create_user_command("JavaHotReload", hot_reload, {
+        desc = "Hot reload changed classes into active JVM debug session",
+      })
     end,
   },
   -- Java LSP & Debug Integration
@@ -189,10 +239,17 @@ return {
           capabilities = blink.get_lsp_capabilities(capabilities)
         end
 
-        -- 5. Detect and register installed JDK runtimes (Adoptium 21, 25, 27)
+        -- 5. Detect and register installed JDK runtimes (Adoptium 21, 25, 27, JetBrains JBR 25)
         local runtimes = {}
+        local jdks = vim.fn.expand("$USERPROFILE/.jdks")
         local gradle_jdks = vim.fn.expand("$USERPROFILE/.gradle/jdks")
-        if vim.fn.isdirectory(gradle_jdks .. "/eclipse_adoptium-25-amd64-windows.2") == 1 then
+        if vim.fn.isdirectory(jdks .. "/jbr-25.0.4.1") == 1 then
+          table.insert(runtimes, {
+            name = "JavaSE-25",
+            path = jdks .. "/jbr-25.0.4.1",
+            default = true,
+          })
+        elseif vim.fn.isdirectory(gradle_jdks .. "/eclipse_adoptium-25-amd64-windows.2") == 1 then
           table.insert(runtimes, {
             name = "JavaSE-25",
             path = gradle_jdks .. "/eclipse_adoptium-25-amd64-windows.2",
@@ -217,6 +274,7 @@ return {
           },
           settings = {
             java = {
+              autobuild = { enabled = true },
               signatureHelp = { enabled = true },
               contentProvider = { preferred = "fernflower" },
               completion = {
@@ -293,6 +351,12 @@ return {
             vim.keymap.set("n", "<leader>tc", jdtls.test_class, map_opts)
             vim.keymap.set("n", "<leader>tm", jdtls.test_nearest_method, map_opts)
             vim.keymap.set("n", "<leader>co", jdtls.organize_imports, { buffer = bufnr, desc = "Organize Imports" })
+            vim.keymap.set("n", "<leader>hr", hot_reload, { buffer = bufnr, desc = "Debug: Hot Reload / Redefine Classes" })
+            vim.keymap.set("n", "<leader>rh", hot_reload, { buffer = bufnr, desc = "Debug: Hot Reload / Redefine Classes" })
+
+            vim.api.nvim_buf_create_user_command(bufnr, "JavaHotReload", hot_reload, {
+              desc = "Hot reload changed classes into active JVM debug session",
+            })
           end,
         }
 
