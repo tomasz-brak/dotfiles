@@ -54,6 +54,7 @@ return {
             fallbackFlags = { "-std=c++26" }, -- or "-std=c++23" depending on your project
           },
         },
+        vhdl_ls = {},
       },
     },
   },
@@ -89,6 +90,7 @@ return {
     "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
+        "rust_hdl",
         "jdtls",
         "java-debug-adapter",
         "java-test",
@@ -258,6 +260,7 @@ return {
         tex = { "tex-fmt" },
         plaintex = { "tex-fmt" },
         bib = { "tex-fmt" },
+        vhdl = { "vsg" },
       },
       formatters = {
         ["tex-fmt"] = {
@@ -267,6 +270,11 @@ return {
           -- Standard usage for tex-fmt as a filter:
           args = { "--stdin" },
           stdin = true,
+        },
+        ["vsg"] = {
+          args = { "--fix", "-f", "$FILENAME" },
+          stdin = false,
+          exit_codes = { 0, 1 },
         },
       },
     },
