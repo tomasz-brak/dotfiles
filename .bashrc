@@ -9,7 +9,7 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 PS1='[\u@\h \W]\$ '
 
-export QSYS_ROOTDIR="/home/tomasz/.cache/yay/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/25.1/quartus/sopc_builder/bin"
+export QSYS_ROOTDIR="/home/tomasz/altera_lite/25.1std/quartus/sopc_builder/bin"
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"

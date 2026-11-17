@@ -121,7 +121,7 @@ alias quick-rate-mirrors='export TMPFILE="$(mktemp)"; \
       && sudo mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist-backup \
       && sudo mv $TMPFILE /etc/pacman.d/mirrorlist'
 
-export QSYS_ROOTDIR="/home/tomasz/.cache/yay/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/25.1/quartus/sopc_builder/bin"
+export QSYS_ROOTDIR="/home/tomasz/altera_lite/25.1std/quartus/sopc_builder/bin"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 
