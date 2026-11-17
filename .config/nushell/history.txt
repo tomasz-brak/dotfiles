@@ -1,2 +1,2 @@
 nvim .
-git status
+git rebase 
