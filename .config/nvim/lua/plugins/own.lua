@@ -43,10 +43,9 @@ return {
         clangd = {
           -- Pass command-line arguments to clangd
           cmd = {
-            "clangd",
+            vim.fn.executable("/usr/bin/clangd") == 1 and "/usr/bin/clangd" or "clangd",
             "--background-index",
             "--clang-tidy",
-            -- CRITICAL: This enables the underlying C++20 module indexing engine
             "--experimental-modules-support",
           },
           -- Fallback flags ensure clangd treats loose files as C++20 modules
