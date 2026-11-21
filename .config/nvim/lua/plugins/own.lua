@@ -335,4 +335,17 @@ return {
       })
     end,
   },
+  {
+    "jbyuki/vcd-viewer.nvim",
+
+    keys = {
+      {
+        "<leader>vv",
+        function()
+          require("vcd-viewer").view()
+        end,
+        desc = "View VCD file",
+      },
+    },
+  },
 }
