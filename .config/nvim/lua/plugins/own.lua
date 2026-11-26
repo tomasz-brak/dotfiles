@@ -46,6 +46,7 @@ return {
             vim.fn.executable("/usr/bin/clangd") == 1 and "/usr/bin/clangd" or "clangd",
             "--background-index",
             "--clang-tidy",
+            "--query-driver=/home/*/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-*",
             "--experimental-modules-support",
           },
           -- Fallback flags ensure clangd treats loose files as C++20 modules
